@@ -17,4 +17,8 @@ for file in os.listdir('src\commands'):
     if file.endswith('.py'):
         client.load_extension(f'commands.{file[:-3]}')
 
+for file in os.listdir('src\cogs'):
+    if file.endswith('.py'):
+        client.load_extension(f'cogs.{file[:-3]}')
+
 client.run(token)
