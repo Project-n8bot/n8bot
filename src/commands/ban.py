@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 @commands.command()
+@commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member, reason=None):
     guild = ctx.guild
 

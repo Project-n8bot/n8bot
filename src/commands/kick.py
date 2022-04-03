@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 @commands.command()
+@commands.has_permissions(kick_members=True)
 async def kick(ctx, member: discord.Member, reason=None):
     guild = ctx.guild
 
