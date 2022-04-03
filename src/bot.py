@@ -6,7 +6,7 @@ import os
 load_dotenv()
 token = os.getenv('TOKEN')
 
-client = commands.Bot(command_prefix='?')
+client = commands.Bot(command_prefix='?', intents=discord.Intents.all())
 
 
 @client.event
