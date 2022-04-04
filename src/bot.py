@@ -6,8 +6,8 @@ import os
 load_dotenv()
 token = os.getenv('TOKEN')
 
-client = commands.Bot(command_prefix='?', intents=discord.Intents.all())
-
+activity = discord.Game('spoon 🥄')
+client = commands.Bot(command_prefix='?', intents=discord.Intents.all(), activity=activity)
 
 @client.event
 async def on_ready():

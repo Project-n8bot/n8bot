@@ -16,7 +16,7 @@ class Events(commands.Cog):
     async def on_member_join(self, member: discord.Member):
 
         guild = member.guild
-        channel = discord.utils.get(guild.channels, name='welcome')
+        channel = discord.utils.get(guild.channels.lower(), name='welcome')
         role = discord.utils.get(guild.roles, name='Member') # make case insensitive later
 
         embed = discord.Embed(title=f'Welcome to the server {member.name}!', description='Hope you enjoy your stay :)', color=discord.Color.teal())
