@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 @commands.command(aliases=['purge', 'prune'])
+@commands.has_permissions(message_delete=True)
 async def clear(ctx, amount):
     channel = ctx.channel
     
