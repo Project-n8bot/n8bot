@@ -10,6 +10,12 @@ class Events(commands.Cog):
     async def on_command_error(self, ctx, error):
         embed = discord.Embed(title=f'Error: {error}', description='Type ?help to see a list of commands', color=discord.Color.red())
         
+        if (isinstance(error, commands.MissingPermissions)):
+            embed.title = 'Sorry, you do not have the required permission(s) to execute this command.'
+        
+        if (isinstance(error, commands.CommandNotFound)):
+            embed.title = 'Sorry, this command does not seem to exist.'
+
         await ctx.send(embed=embed)
 
     @commands.Cog.listener()
