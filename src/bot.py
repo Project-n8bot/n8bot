@@ -1,5 +1,5 @@
 from discord.ext import commands
-import discord, os
+import discord, os, aiohttp, asyncio
 from dotenv import load_dotenv
 import os
 
@@ -9,9 +9,12 @@ token = os.getenv('TOKEN')
 activity = discord.Game('spoon 🥄')
 client = commands.Bot(command_prefix='?', intents=discord.Intents.all(), activity=activity)
 
+client.session = aiohttp.ClientSession()
+
 @client.event
 async def on_ready():
     print('Bot online.')
+
 
 for file in os.listdir('src\commands'):
     if file.endswith('.py'):
