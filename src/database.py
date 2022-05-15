@@ -7,22 +7,10 @@ general = db.general
 leveling = general.leveling
 
 def get_level(user_id):
-    level = leveling.find_one({"_id": user_id})
-    if not level:
-        add_user(user_id)
-        level = 1
-    else:
-        level = level["level"]
-    return level
+    return get_user(user_id)["level"]
 
 def get_xp(user_id):
-    xp = leveling.find_one({"_id": user_id})
-    if not xp:
-        add_user(user_id)
-        xp = 0
-    else:
-        xp = xp["xp"]
-    return xp
+    return get_user(user_id)["xp"]
 
 def add_user(_id):
     data = {
@@ -32,24 +20,28 @@ def add_user(_id):
     }
     leveling.insert_one(data)
 
+def get_user(member_id):
+    user = leveling.find_one({"_id": member_id})
+    if not user:
+        add_user(member_id)
+        user = {"_id": member_id,"level": 1,"xp": 0}
+    return user
+
 def remove_user(member):
     leveling.delete_one({"_id": member.id})
 
 def gain_xp(member_id, xp_amount):
-    user_id = member_id
-
-    level = get_level(user_id)
-    xp = get_xp(user_id)
-
-    leveling.update_one({"_id": user_id}, {"$inc": {"xp": xp_amount}})
+    leveling.update_one({"_id": member_id}, {"$inc": {"xp": xp_amount}})
 
 async def level_up(message):
     user_id = message.author.id
     user = message.author
 
-    level = get_level(user_id)
-    xp = get_xp(user_id)
-    xp_required = level * (10 * 1.5)
+    user_data = get_user(user_id)
+    xp = user_data["xp"]
+    level = user_data["level"]
+
+    xp_required = 5 * (level*level) + (50 * level) + 100
 
     if xp >= xp_required:
         leveling.update_one({"_id": user_id}, {"$set": {"level": level + 1}})
