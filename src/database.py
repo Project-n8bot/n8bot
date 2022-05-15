@@ -7,10 +7,12 @@ general = db.general
 leveling = general.leveling
 
 def get_level(user_id):
-    level = leveling.find_one({"_id": user_id})["level"]
+    level = leveling.find_one({"_id": user_id})
     if not level:
         add_user(user_id)
         level = 1
+    else:
+        level = level["level"]
     return level
 
 def get_xp(user_id):
@@ -18,6 +20,8 @@ def get_xp(user_id):
     if not xp:
         add_user(user_id)
         xp = 0
+    else:
+        xp = xp["xp"]
     return xp
 
 def add_user(_id):
