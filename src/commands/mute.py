@@ -9,7 +9,7 @@ async def mute(ctx, member: discord.Member):
     
     if role:
         await member.add_roles(role)
-        await ctx.send('Member has been muted.')
+        await ctx.send('Member has been muted. :skull:')
     else:
         permissions = discord.Permissions(send_messages=False)
         member_role = discord.utils.get(guild.roles, name='member')
@@ -25,7 +25,7 @@ async def mute(ctx, member: discord.Member):
             await category.set_permissions(role, send_messages=False)
             
         await member.add_roles(role)
-        await ctx.send('Member has been muted.')
+        await ctx.send('Member has been muted. :skull:')
 
 def setup(client):
     client.add_command(mute)

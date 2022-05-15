@@ -1,19 +1,27 @@
 import discord, os
 from discord.ext import commands
 from discord import Color
-from inspect import signature
+import json
 
 @commands.command(aliases=['help'])
-async def help_command(ctx):
-    embed = discord.Embed(title='Help Menu', colour=Color.teal())
-    for file in os.listdir('src\commands'):
-        file_name = file[:-3].title()
-        if not file.startswith('__'):
-            #arguments = str(signature(f'{file[:-3]}.{file[:-3]}()'))
-            embed.add_field(name=file_name, value=(f'{file_name} command'), inline=False)
-            #await ctx.send(arguments)
-    
-    await ctx.send(embed=embed)
+async def help_command(ctx, command=None):
+    commands = json.load(open("src/commands.json"))
+    if command is None:
+        embed = discord.Embed(title='Help Menu', colour=Color.teal())
+        for command in commands:
+            command_data = commands[command]
+            embed.add_field(name=command, value=command_data['description'])
+        
+        await ctx.send(embed=embed)
+    else:
+        if command in commands:
+            embed = discord.Embed(title=command, colour=Color.teal(), description=commands[command]['description'])
+            command_data = commands[command]
+            for arg in command_data['args']:
+                embed.add_field(name=arg['name'], value=arg['description'])
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Command not found")
 
 def setup(client):
     client.add_command(help_command)

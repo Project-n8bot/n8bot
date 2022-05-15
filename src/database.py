@@ -1,38 +1,35 @@
-import mysql.connector
+from pymongo import MongoClient
 import os
 
-host_ip = os.environ.get("DB_IP")
-db_password = os.environ.get("DB_PASSWORD")
-db = mysql.connector.connect(host=host_ip, user="root", password=db_password, database="")
-mycursor = db.cursor()
+db = MongoClient(os.environ.get("MONGO_URL"))
+
+general = db.general
+leveling = general.leveling
 
 def get_level(user_id):
-    sql = "select level from users where user_id = %s"
-    mycursor.execute(sql, (user_id, ))
-    level = mycursor.fetchall()
-
-    return(level[0][0])
+    level = leveling.find_one({"_id": user_id})["level"]
+    if not level:
+        add_user(user_id)
+        level = 1
+    return level
 
 def get_xp(user_id):
-    sql = "select xp from users where user_id = %s"
-    mycursor.execute(sql, (user_id, ))
-    xp = mycursor.fetchall()
-    
-    return(xp[0][0])
+    xp = leveling.find_one({"_id": user_id})["xp"]
+    if not xp:
+        add_user(user_id)
+        xp = 0
+    return xp
 
-def add_user(member):
-    sql = "insert into users (user_id, level, xp) values (%s, %s, %s)"
-    val = (member.id, 1, 0)
-    mycursor.execute(sql, val)
-
-    db.commit()
+def add_user(_id):
+    data = {
+        "_id": _id,
+        "level": 1,
+        "xp": 0
+    }
+    leveling.insert_one(data)
 
 def remove_user(member):
-    sql = "delete from users where user_id = %s"
-    val = (member.id, )
-    mycursor.execute(sql, val)
-
-    db.commit()
+    leveling.delete_one({"_id": member.id})
 
 def gain_xp(member_id, xp_amount):
     user_id = member_id
@@ -40,11 +37,7 @@ def gain_xp(member_id, xp_amount):
     level = get_level(user_id)
     xp = get_xp(user_id)
 
-    sql = "update users set xp = %s where user_id = %s"
-    val = (xp + xp_amount, user_id)
-    mycursor.execute(sql, val)
-    
-    db.commit()
+    leveling.update_one({"_id": user_id}, {"$inc": {"xp": xp_amount}})
 
 async def level_up(message):
     user_id = message.author.id
@@ -55,18 +48,9 @@ async def level_up(message):
     xp_required = level * (10 * 1.5)
 
     if xp >= xp_required:
-        sql = "update users set level = %s where user_id = %s"
-        val = (level + 1, message.author.id)
-        mycursor.execute(sql, val)
+        leveling.update_one({"_id": user_id}, {"$set": {"level": level + 1}})
 
-        db.commit()
-        
         await message.channel.send(f"Congrats {user.mention} you leveled up to level " + str(level + 1))
 
 def wipe(member_id):
-
-    sql = "update users set level = 1, xp = 0 where user_id = %s"
-    val = (member_id, )
-    mycursor.execute(sql, val)
-
-    db.commit()
+    leveling.update_one({"_id": member_id}, {"$set": {"level": 1, "xp": 0}})

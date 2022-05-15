@@ -1,0 +1,105 @@
+{
+    "kick": {
+        "description": "Kicks a user from the server.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to kick."
+            },
+            {
+                "name": "reason",
+                "type": "string",
+                "description": "The reason for the kick."
+            }
+        ]
+    },
+    "ban": {
+        "description": "Bans a user from the server.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to ban."
+            },
+            {
+                "name": "reason",
+                "type": "string",
+                "description": "The reason for the ban."
+            }
+        ]
+    },
+    "unban": {
+        "description": "Unbans a user from the server.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to unban."
+            }
+        ]
+    },
+    "mute": {
+        "description": "Mutes a user from the server.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to mute."
+            },
+            {
+                "name": "reason",
+                "type": "string",
+                "description": "The reason for the mute."
+            }
+        ]
+    },
+    "unmute": {
+        "description": "Unmutes a user from the server.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to unmute."
+            }
+        ]
+    },
+    "clear": {
+        "description": "Clears a channel of messages.",
+        "args": [
+            {
+                "name": "amount",
+                "type": "number",
+                "description": "The amount of messages to clear."
+            }
+        ]
+    },
+    "dog": {
+        "description": "Sends a random dog image.",
+        "args": []
+    },
+    "level": {
+        "description": "Sends a user's level.",
+        "args": [
+            {
+                "name": "user",
+                "type": "user",
+                "description": "The user to get the level of."
+            }
+        ]
+    },
+    "ping": {
+        "description": "Sends a ping to the bot.",
+        "args": []
+    },
+    "reload": {
+        "description": "Reloads a command.",
+        "args": [
+            {
+                "name": "command",
+                "type": "string",
+                "description": "The command to reload."
+            }
+        ]
+    }
+}
