@@ -16,7 +16,7 @@ def get_level(user_id):
     return level
 
 def get_xp(user_id):
-    xp = leveling.find_one({"_id": user_id})["xp"]
+    xp = leveling.find_one({"_id": user_id})
     if not xp:
         add_user(user_id)
         xp = 0
