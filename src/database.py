@@ -50,3 +50,7 @@ async def level_up(message):
 
 def wipe(member_id):
     leveling.update_one({"_id": member_id}, {"$set": {"level": 1, "xp": 0}})
+
+def get_top_users(amount):
+    users = leveling.find().sort("xp", -1).limit(amount)
+    return [user for user in users]
