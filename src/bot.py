@@ -10,6 +10,7 @@ activity = discord.Game('spoon 🥄')
 client = commands.Bot(command_prefix='?', intents=discord.Intents.all(), activity=activity)
 
 client.session = aiohttp.ClientSession()
+client.remove_command('help')
 
 @client.event
 async def on_ready():
